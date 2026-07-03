@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>致靖姐 · 菠萝屋专属纪念</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Comic Sans MS", "Microsoft YaHei", sans-serif;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* 菠萝屋启动封面 */
+    .start-page {
+        width: 100vw;
+        height: 100vh;
+        background: url('https://pic.netbian.com/uploads/allimg/250307/151944-1741331984b6b2.jpg') center/cover no-repeat;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 1s ease, transform 1s ease;
+    }
+    .start-page.hide {
+        opacity: 0;
+        pointer-events: none;
+        transform: scale(1.1);
+    }
+    .pineapple-click-area {
+        width: 300px;
+        height: 400px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -40%);
+        cursor: pointer;
+    }
+    .start-text1 {
+        font-size: 26px;
+        color: #fff;
+        text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        margin-top: 24px;
+        font-weight: bold;
+        position: absolute;
+        bottom: 120px;
+    }
+    .tip-text {
+        font-size: 14px;
+        color: #fff;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        position: absolute;
+        bottom: 80px;
+        animation: flash 2s infinite;
+    }
+    @keyframes flash {
+        0%,100% {opacity: 0.6;}
+        50% {opacity: 1;}
+    }
+
+    /* 主页面渐变背景 */
+    .main-page {
+        min-height: 100vh;
+        background: linear-gradient(-45deg, #FFF370, #FFE66D, #87CEFA, #B3E5FC);
+        background-size: 400% 400%;
+        animation: bgGradient 12s ease infinite;
+        padding: 40px 20px;
+        display: none;
+    }
+    .main-page.show {
+        display: block;
+    }
+    @keyframes bgGradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .card {
+        max-width: 720px;
+        margin: 0 auto;
+        background: #ffffffee;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        padding: 50px 45px;
+        backdrop-filter: blur(6px);
+        opacity: 0;
+        transform: translateY(30px);
+        animation: cardIn 1s ease forwards;
+    }
+    @keyframes cardIn {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 团队板块 */
+    .team-section {
+        margin-bottom: 45px;
+        padding: 40px 20px 30px;
+        background: linear-gradient(90deg, #fffbe7, #e8fff7);
+        border-radius: 22px;
+        border: 3px dashed #ffd300;
+        position: relative;
+    }
+
+    /* 左上角菠萝小插画 */
+    .corner-pineapple {
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        font-size: 60px;
+    }
+
+    /* 板块标题 */
+    .team-title {
+        text-align: center;
+        color: #0088dd;
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 40px;
+    }
+    .team-title::before {
+        content: "🏠";
+        margin-right: 10px;
+    }
+
+    /* 四人横向均匀排布 */
+    .team-row {
+        display: flex;
+        justify-content: space-evenly;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .team-item {
+        width: 135px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        animation: bounceUp 2.2s ease-in-out infinite;
+    }
+
+    .team-item:nth-child(1) { animation-delay: 0s; }
+    .team-item:nth-child(2) { animation-delay: 0.35s; }
+    .team-item:nth-child(3) { animation-delay: 0.7s; }
+    .team-item:nth-child(4) { animation-delay: 1.05s; }
+
+    @keyframes bounceUp {
+        0%,100% { transform: translateY(0); }
+        50% { transform: translateY(-9px); }
+    }
+
+    .team-item:hover {
+        transform: translateY(-14px) scale(1.06);
+        box-shadow: 0 12px 28px #ffd30048;
+    }
+
+    /* 黄色粗边框圆形头像 */
+    .team-img {
+        width: 135px;
+        height: 135px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #ffd300;
+        background: #fff;
+    }
+
+    /* 头像下方蓝色人名 */
+    .team-name {
+        margin-top: 14px;
+        font-size: 24px;
+        color: #0088dd;
+        font-weight: 600;
+    }
+    /* 放大emoji字号 */
+    .team-emoji {
+        font-size: 34px;
+        margin-top: 8px;
+    }
+
+    /* 时间轴容器 */
+    .timeline-wrap {
+        position: relative;
+        margin-top: 30px;
+        padding: 10px 0;
+    }
+
+    /* 俏皮波浪线 整体右移 */
+    .timeline-line {
+        position: absolute;
+        left: 30%;
+        right: 18%;
+        top: 26px;
+        height: 50px;
+        background: none;
+        border-top: 4px solid #ffd300;
+        border-radius: 50% / 20px;
+        animation: wiggle 3s ease-in-out infinite;
+    }
+
+    @keyframes wiggle {
+        0%,100% { transform: translateX(0); }
+        50% { transform: translateX(6px); }
+    }
+
+    /* 时间轴节点 整体右移 */
+    .timeline-nodes {
+        display: flex;
+        justify-content: space-evenly;
+        position: relative;
+        z-index: 2;
+        padding: 0 18%;
+    }
+
+    .timeline-node {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #ffd300;
+        border: 3px solid #fff;
+        box-shadow: 0 0 0 2px #ffd300;
+    }
+
+    /* 日期文字 */
+    .timeline-date {
+        margin-top: 8px;
+        font-size: 20px;
+        color: #0088dd;
+        font-weight: bold;
+        text-shadow: 1px 1px 0 #fff;
+    }
+
+    /* 装饰元素同步右移 */
+    .timeline-deco {
+        position: absolute;
+        font-size: 22px;
+        color: #ffd300;
+        opacity: 0.75;
+        animation: floatDeco 4s ease-in-out infinite;
+    }
+
+    .deco-gear {
+        top: 8px;
+        left: 34%;
+        animation-delay: 0s;
+    }
+
+    .deco-starfish {
+        top: 32px;
+        left: 52%;
+        animation-delay: 0.8s;
+    }
+
+    .deco-bubble {
+        top: 12px;
+        right: 18%;
+        animation-delay: 1.6s;
+    }
+
+    @keyframes floatDeco {
+        0%,100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-8px) rotate(12deg); }
+    }
+
+    .sponge-title {
+        text-align: center;
+        font-size: 30px;
+        color: #0091D5;
+        font-weight: bold;
+        margin-bottom: 20px;
+        opacity: 0;
+        animation: textIn 1s ease 0.3s forwards;
+    }
+
+    .sponge-desc {
+        text-align: center;
+        color: #FFB900;
+        font-size: 16px;
+        margin-bottom: 35px;
+        letter-spacing: 2px;
+        opacity: 0;
+        animation: textIn 1s ease 0.5s forwards;
+    }
+
+    p {
+        font-size: 16px;
+        color: #333;
+        line-height: 1.9;
+        margin-bottom: 16px;
+        text-indent: 2em;
+        opacity: 0;
+        animation: textIn 1s ease forwards;
+    }
+
+    @keyframes textIn {
+        to { opacity: 1; }
+    }
+
+    .memory-box {
+        margin: 40px 0;
+        padding: 28px;
+        background: #FFFBE7;
+        border: 2px dashed #FFD300;
+        border-radius: 15px;
+        transition: all 0.4s ease;
+        cursor: default;
+    }
+
+    .memory-box:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 8px 25px #ffd30060;
+    }
+
+    .memory-box h3 {
+        color: #0091D5;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 18px;
+    }
+
+    .memory-box p {
+        text-indent: 0;
+    }
+
+    /* 折叠交互模块样式 */
+    .collap-title {
+        display:flex;
+        gap:16px;
+        align-items:center;
+        cursor:pointer;
+        padding:12px;
+        background:#fff;
+        border-radius:12px;
+        border:2px dashed #ffd300;
+        margin-bottom:12px;
+    }
+    .collap-content {
+        max-height:0;
+        overflow:hidden;
+        transition:max-height 0.6s ease;
+        padding:0 10px;
+    }
+    .collap-content.open {
+        max-height:1400px;
+        padding-bottom:16px;
+    }
+    /* 信封独立3D翻盖容器，不受外层高度挤压回弹 */
+    .envelope-box {
+        position:relative;
+        perspective:800px;
+        margin-top:8px;
+    }
+    .envelope-cover {
+        transition:transform 0.7s ease;
+        transform-origin:top center;
+        position:relative;
+        z-index:2;
+    }
+    /* 单独控制信封翻开状态，不依赖collap-content高度 */
+    .envelope-open .envelope-cover {
+        transform:rotateX(-180deg);
+    }
+
+    .wish-text {
+        margin-top: 40px;
+        text-align: right;
+    }
+
+    .wish-text p:nth-child(1) {
+        text-indent: 0;
+        font-size: 17px;
+        color: #222;
+    }
+
+    .bless {
+        font-size: 18px;
+        color: #0091D5;
+        font-weight: 500;
+        margin: 10px 0;
+        text-indent: 0 !important;
+    }
+
+    .sign {
+        color: #666;
+        font-size: 15px;
+        text-indent: 0 !important;
+    }
+
+    .footer {
+        margin-top: 50px;
+        text-align: center;
+        font-size: 14px;
+        color: #999;
+    }
+
+    .float-box {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        font-size: 50px;
+        animation: float 3s ease-in-out infinite;
+        pointer-events: none;
+        transition: transform 0.2s ease;
+    }
+
+    @keyframes float {
+        0%,100%{transform: translateY(0) rotate(-5deg);}
+        50%{transform: translateY(-12px) rotate(5deg);}
+    }
+
+    .love {
+        position: fixed;
+        pointer-events: none;
+        animation: loveFall 1.5s ease forwards;
+        font-size: 20px;
+    }
+
+    @keyframes loveFall {
+        0% { opacity: 1; transform: translateY(0) scale(1); }
+        100% { opacity: 0; transform: translateY(-300px) scale(1.5); }
+    }
+
+    .egg-btn {
+        display: block;
+        margin: 30px auto 0;
+        padding: 10px 22px;
+        border: 2px dashed #FFD300;
+        background: transparent;
+        color: #0091D5;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 14px;
+    }
+
+    .egg-btn:hover {
+        background: #FFD300;
+        color: #fff;
+    }
+
+    .egg-pop {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fffef0;
+        padding: 30px;
+        border: 3px solid #FFD300;
+        border-radius: 18px;
+        box-shadow: 0 0 30px rgba(0,0,0,0.15);
+        z-index: 999;
+        display: none;
+        max-width: 400px;
+        text-align: center;
+    }
+
+    .egg-pop p {
+        text-indent: 0;
+    }
+
+    .close-btn {
+        margin-top: 15px;
+        padding: 6px 18px;
+        border: none;
+        background: #0091D5;
+        color: #fff;
+        border-radius: 20px;
+        cursor: pointer;
+    }
+
+    .chat-wrap {
+        margin-top: 40px;
+        border-top: 1px dashed #ffd300;
+        padding-top: 30px;
+    }
+
+    .chat-wrap h3 {
+        text-align: center;
+        color: #0091D5;
+        margin-bottom: 20px;
+    }
+
+    .chat-box {
+        height: 240px;
+        overflow-y: auto;
+        background: #f8fcff;
+        border-radius: 12px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    .msg-me {
+        text-align: right;
+        margin: 8px 0;
+    }
+
+    .msg-me span {
+        display: inline-block;
+        background: #87CEFA;
+        color: #111;
+        padding: 6px 12px;
+        border-radius: 16px;
+        max-width: 80%;
+    }
+
+    .msg-bot {
+        text-align: left;
+        margin: 8px 0;
+    }
+
+    .msg-bot span {
+        display: inline-block;
+        background: #ffe670;
+        color: #111;
+        padding: 6px 12px;
+        border-radius: 16px;
+        max-width: 80%;
+    }
+
+    .chat-input-area {
+        display: flex;
+        gap: 10px;
+    }
+
+    #chatInput {
+        flex: 1;
+        padding: 10px 14px;
+        border: 2px solid #ffd300;
+        border-radius: 30px;
+        outline: none;
+        font-size: 15px;
+    }
+
+    #sendBtn {
+        padding: 0 20px;
+        background: #0091D5;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+    }
+    /* 猜你想问快捷按钮 */
+    .guess-ask-box {
+        margin-top:12px;
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+    }
+    .guess-btn {
+        padding:6px 12px;
+        border:1px solid #0088dd;
+        border-radius:20px;
+        background:#fff;
+        color:#0088dd;
+        cursor:pointer;
+        font-size:14px;
+    }
+    .guess-btn:hover {
+        background:#0088dd;
+        color:#fff;
+    }
+</style>
+</head>
+<body>
+    <!-- 菠萝屋启动首页 -->
+    <div class="start-page" id="startPage">
+        <div class="pineapple-click-area" id="pineappleClick"></div>
+        <div class="start-text1">欢迎来到菠萝屋</div>
+        <div class="tip-text">点击菠萝屋进入回忆小屋</div>
+    </div>
+
+    <!-- 主纪念页面 -->
+    <div class="main-page" id="mainPage">
+        <div class="card">
+            <!-- 团队板块：四人一排 + 俏皮时间轴 -->
+            <div class="team-section">
+                <div class="corner-pineapple">🍍</div>
+                <h2 class="team-title">俺们FFFFF4</h2>
+
+                <div class="team-row">
+                    <!-- 1 靖靖姐 放大波浪卷披发无刘海emoji -->
+                    <div class="team-item">
+                        <img src="jing.jpg" class="team-img" alt="靖靖姐">
+                        <div class="team-name">靖靖姐</div>
+                        <div class="team-emoji">🏆️🦸</div>
+                    </div>
+                    <!-- 2 欣怡 -->
+                    <div class="team-item">
+                        <img src="xinyi.jpg" class="team-img" alt="欣怡">
+                        <div class="team-name">欣怡</div>
+                    </div>
+                    <!-- 3 娜娜 -->
+                    <div class="team-item">
+                        <img src="nana.jpg" class="team-img" alt="娜娜">
+                        <div class="team-name">娜娜</div>
+                    </div>
+                    <!-- 4 承玲 -->
+                    <div class="team-item">
+                        <img src="chenling.jpg" class="team-img" alt="承玲">
+                        <div class="team-name">承玲</div>
+                    </div>
+                </div>
+
+                <!-- 俏皮时间轴：整体右移3个黄色点位 -->
+                <div class="timeline-wrap">
+                    <div class="timeline-line"></div>
+                    <!-- 海底装饰同步右移 -->
+                    <div class="timeline-deco deco-gear">⚙️</div>
+                    <div class="timeline-deco deco-starfish">⭐</div>
+                    <div class="timeline-deco deco-bubble">🌟</div>
+
+                    <!-- 3个圆点节点 -->
+                    <div class="timeline-nodes">
+                        <div class="timeline-node"></div>
+                        <div class="timeline-node"></div>
+                        <div class="timeline-node"></div>
+                    </div>
+                    <!-- 对应入职日期 -->
+                    <div class="timeline-nodes">
+                        <div class="timeline-date">2026.4.16</div>
+                        <div class="timeline-date">2026.4.17</div>
+                        <div class="timeline-date">2026.7.1</div>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="sponge-title">致 靖姐✨</h1>
+            <div class="sponge-desc">有幸相遇，不负遇见</div>
+
+            <p>今天我的云雀 HR 实习正式画上句号啦，这段实习最幸运的就是遇见温柔又靠谱的靖姐。
+            还记得面试时我还说，上一段实习学到的前端开发知识好像快要跟不上AI时代。
+            这段时间跟着你处理各类繁杂表格，发现不少工作都需要手动整理，沉淀思考过后才意识到，
+            之前学的总能在某个时候派上用场，还能做点小东西讨你开心。
+            噢，我的言外之意是，你教会我的一切都内化在了我身上，会一直陪着我往前走
+            <p>【经典名言：被你影响和塑造的我，会成为我的一部分】</p>
+            <p>【另一个言外之意：我现在是站在用户的视角进行工作的，知豆不】</p>
+            <!-- 交互折叠记忆盒 -->
+            <div class="memory-box">
+                <h3>💛 点滴</h3>
+
+                <!-- 1、实习收获 点击展开 -->
+                <div class="collap-wrap">
+                    <div class="collap-title" onclick="toggleCollap('skillBox')">
+                        <span style="font-size:40px;">📋</span>
+                        <div>
+                            <h4 style="color:#0088dd;font-size:20px;">一、实习报告（点☝️下）</h4>
+                        </div>
+                    </div>
+                    <div class="collap-content" id="skillBox">
+                        <p style="text-indent:0;">
+                            <b>1. 招聘流程</b><br>
+                            这是俺第一次接触这个行业，后面听你对实习生要求，我寻思我也不知我咋进来的，说了吧，一切都是缘分😵‍💫
+                            <p>对接业务需求 → 创建职位 → 发布招聘广告 → 筛选简历 → 电话沟通候选人 → 同步备注 → 更新表格 → 安排好几次面试 → 发放offer → 背景调查 → 信息采集 → 跟进待入职员工，牛不喽
+                            </p>
+                          </p>
+                        <p style="text-indent:0;margin-top:10px;">
+                            <b>2. 北森系统熟练运用</b><br>
+                            啦啦啦啦啦啦啦，北森操作手册已倒背如流，已传授给承玲，到时候看承玲威力就知道我的熟练度了🤪
+                        </p>
+                        <p style="text-indent:0;margin-top:10px;">
+                            <b>3. 综合成长</b><br>
+                            养成细心、严谨、主动大胆沟通的习惯；接触各类求职者，学会灵活应对！噢不好，变成变色龙了，我不要哇啊啊啊啊啊啊啊😨
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2、感恩信封 点击翻盖展开 -->
+                <div class="collap-wrap">
+                    <div class="collap-title" onclick="toggleEnvelope()">
+                        <span style="font-size:40px;">💌</span>
+                        <div>
+                            <h4 style="color:#0088dd;font-size:20px;">二、一个电子信封（点✌️下）</h4>
+                        </div>
+                    </div>
+                    <div class="collap-content" id="letterBox">
+                        <!-- 信封单独容器，独立控制翻开状态，不会回弹 -->
+                        <div class="envelope-box" id="envWrap">
+                            <div class="envelope-cover" style="padding:12px;background:#ffefc8;border-radius:6px;">
+                                <p style="text-indent:0;">
+                                   <br> 当初面试时就特别喜欢你的性格，对待求职者耐心细致、倾囊相授，让人印象很深。
+                                    我本身适应能力还算不错，但你的热情和有趣深深感染了我。
+                                    这段时间真的非常感谢你的悉心指导，
+                                    跟着你无论是工作还是日常相处，我都学到很多：做事严谨、敢于创新，也学会保持松弛的心态，
+                                </p>
+                                <p style="text-indent:0;margin-top:10px;">
+                                    你愿意给我们充足机会去探索，在条条框框，也有自由探索的感觉，
+                                </p>
+                                <p style="text-indent:0;margin-top:10px;">
+                                    和你共事的时光超珍贵，所有照顾和教导我都记牢咯！
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wish-text">
+                <p class="sign">2026年07月03日 · 欧欣怡</p>
+            </div>
+
+            <button class="egg-btn">💖 点开神秘祝福语</button>
+
+            <!-- 聊天对话区域 + 猜你想问快捷按钮 -->
+            <div class="chat-wrap">
+                <h3> 🙋‍♀️我是欧欣怡的机器人（可陪聊）</h3>
+                <div class="chat-box" id="chatBox"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="输入query...">
+                    <button id="sendBtn">发送</button>
+                </div>
+                <!-- 猜你想问快捷按钮 -->
+                <div class="guess-ask-box">
+                    <button class="guess-btn" onclick="quickSend('都要顺顺利利的')">都要顺顺利利的</button>
+                    <button class="guess-btn" onclick="quickSend('你咋这么牛')">你咋这么牛</button>
+                </div>
+            </div>
+
+            <div class="footer">
+                以海绵宝宝的温柔，致敬最好的带教 靖靖姐· 感恩遇见 💛
+            </div>
+        </div>
+
+        <!-- 悄悄话弹窗 -->
+        <div class="egg-pop" id="eggPop">
+            <h3 style="color:#0091D5;margin-bottom:15px;">给靖姐的言简意赅祝福 🧽</h3>
+            <p>谢谢您这一路的指导、兜底、包容</p>
+            <p>愿靖姐：身体健康、顺风顺水、永远快乐！✨</p>
+            <button class="close-btn" onclick="closePop()">俺知豆了</button>
+        </div>
+
+        <!-- 悬浮海绵宝宝动效 -->
+        <div class="float-box">🧽</div>
+    </div>
+
+    <script>
+        // 页面切换
+        const startPage = document.getElementById('startPage');
+        const mainPage = document.getElementById('mainPage');
+        const pineappleClick = document.getElementById('pineappleClick');
+        pineappleClick.addEventListener('click', () => {
+            startPage.classList.add('hide');
+            setTimeout(() => {
+                mainPage.classList.add('show');
+            }, 600);
+        })
+
+        // 实习技能面板切换
+        function toggleCollap(id) {
+            let box = document.getElementById(id);
+            box.classList.toggle('open');
+        }
+        // 信封独立开关，单独记录翻开状态，不再联动collap高度
+        let envelopeOpenFlag = false;
+        function toggleEnvelope() {
+            let wrap = document.getElementById('envWrap');
+            envelopeOpenFlag = !envelopeOpenFlag;
+            if(envelopeOpenFlag){
+                wrap.classList.add('envelope-open');
+                // 自动把外层容器撑开，保证信封完全显示
+                document.getElementById('letterBox').classList.add('open');
+            }else{
+                wrap.classList.remove('envelope-open');
+            }
+        }
+
+        // 聊天基础逻辑
+        const chatBox = document.getElementById('chatBox');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        function saveHistory(){
+            localStorage.setItem('chatHistory', chatBox.innerHTML);
+        }
+        function loadHistory(){
+            let h = localStorage.getItem('chatHistory');
+            if(h) chatBox.innerHTML = h;
+        }
+        loadHistory();
+
+        // 快捷提问一键发送
+        function quickSend(text) {
+            chatInput.value = text;
+            sendMsg();
+        }
+        function sendMsg() {
+            let val = chatInput.value.trim();
+            if(!val) return;
+            chatBox.innerHTML += `<div class="msg-me"><span>${val}</span></div>`;
+            chatInput.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+            saveHistory();
+            // 自动回复
+            setTimeout(()=>{
+                const qaLib = [
+                    {q:["谢谢你","辛苦"],a:"不用客气靖姐！这段时间多亏有你，能遇见您真的超级幸运🧽"},
+                    {q:["前程","顺利",],a:"谢谢靖姐！也祝您永远轻松快乐，工作顺心，天天都有海绵宝宝一样的好心情✨"},
+                    {q:["你咋这么牛"],a:"我也觉得哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"},
+                ];
+                let res = "很抱歉我的主人很懒，只给我知识库输如三条猜你想问的prompt，想她就去找她真人聊天吧";
+                for(let item of qaLib) {
+                    for(let kw of item.q) {
+                        if(val.includes(kw)) res = item.a;
+                    }
+                }
+                chatBox.innerHTML += `<div class="msg-bot"><span>${res}</span></div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                saveHistory();
+            },600);
+        }
+        sendBtn.onclick = sendMsg;
+        chatInput.onkeydown = e => e.key === 'Enter' && sendMsg();
+
+        // 弹窗开关
+        const pop = document.getElementById('eggPop');
+        document.querySelector('.egg-btn').onclick = ()=> pop.style.display = 'block';
+        function closePop(){ pop.style.display = 'none'; }
+
+        // 鼠标跟随海绵
+        const sponge = document.querySelector('.float-box');
+        document.addEventListener('mousemove',(e)=>{
+            let x = (e.clientX - window.innerWidth/2) / 50;
+            let y = (e.clientY - window.innerHeight/2) / 50;
+            sponge.style.transform = `translate(${x}px,${y}px)`;
+        })
+    </script>
+</body>
+</html>
